@@ -850,7 +850,7 @@
       nav.style.padding = window.scrollY > 60 ? '12px 60px' : '20px 60px';
     });
 
-    // Contact form - sends via WhatsApp
+    // Contact form - sends email only
     function enviarMensagem() {
       const nome = document.getElementById('nome').value.trim();
       const email = document.getElementById('email').value.trim();
@@ -864,12 +864,22 @@
         return;
       }
 
-      const texto = `Olá! Meu nome é *${nome}*${empresa ? ', da empresa *' + empresa + '*' : ''}.%0AE-mail: ${email}%0A%0A${mensagem}`;
-      const url = `https://wa.me/5541984648150?text=${texto}`;
+      const assunto = encodeURIComponent(`Contato pelo site - ${nome}${empresa ? ' | ' + empresa : ''}`);
+      const corpo = encodeURIComponent(
+        `Nome: ${nome}
+` +
+        `E-mail: ${email}
+` +
+        (empresa ? `Empresa: ${empresa}
+` : '') +
+        `
+Mensagem:
+${mensagem}`
+      );
 
       feedback.style.color = 'var(--gold)';
-      feedback.textContent = 'Redirecionando para o WhatsApp...';
-      setTimeout(() => { window.open(url, '_blank'); }, 600);
+      feedback.textContent = '✓ Abrindo seu e-mail...';
+      window.location.href = `mailto:contato@rodini.com.br?subject=${assunto}&body=${corpo}`;
     }
   </script>
 </body>

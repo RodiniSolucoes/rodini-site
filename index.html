@@ -217,8 +217,8 @@
     #valores { background: var(--black); }
     .valores-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 28px;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 16px;
     }
     .valor-item {
       border: 1px solid rgba(201,168,76,0.15);
@@ -496,6 +496,7 @@
       .nav-links { display: none; }
       section { padding: 70px 24px; }
       .mvv-grid, .metod-grid { grid-template-columns: 1fr; }
+      .valores-grid { grid-template-columns: repeat(3, 1fr); }
       .livro-layout, .contato-layout { grid-template-columns: 1fr; gap: 48px; }
       footer { flex-direction: column; gap: 16px; text-align: center; }
       #hero { padding: 100px 24px 60px; }
@@ -803,11 +804,12 @@
           </div>
         </div>
         <div class="contato-form">
-          <input type="text" placeholder="Seu nome" />
-          <input type="email" placeholder="Seu e-mail" />
-          <input type="text" placeholder="Empresa" />
-          <textarea placeholder="Como podemos ajudar?"></textarea>
-          <button class="btn-send"><span>Enviar mensagem</span></button>
+          <input type="text" id="nome" placeholder="Seu nome" />
+          <input type="email" id="email" placeholder="Seu e-mail" />
+          <input type="text" id="empresa" placeholder="Empresa" />
+          <textarea id="mensagem" placeholder="Como podemos ajudar?"></textarea>
+          <div id="form-feedback" style="font-size:0.75rem;min-height:20px;color:var(--gold);letter-spacing:0.08em;"></div>
+          <button class="btn-send" onclick="enviarMensagem()"><span>Enviar mensagem</span></button>
         </div>
       </div>
     </div>
@@ -847,6 +849,28 @@
     window.addEventListener('scroll', () => {
       nav.style.padding = window.scrollY > 60 ? '12px 60px' : '20px 60px';
     });
+
+    // Contact form - sends via WhatsApp
+    function enviarMensagem() {
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const empresa = document.getElementById('empresa').value.trim();
+      const mensagem = document.getElementById('mensagem').value.trim();
+      const feedback = document.getElementById('form-feedback');
+
+      if (!nome || !email || !mensagem) {
+        feedback.style.color = '#e05555';
+        feedback.textContent = 'Por favor, preencha nome, e-mail e mensagem.';
+        return;
+      }
+
+      const texto = `Olá! Meu nome é *${nome}*${empresa ? ', da empresa *' + empresa + '*' : ''}.%0AE-mail: ${email}%0A%0A${mensagem}`;
+      const url = `https://wa.me/5541984648150?text=${texto}`;
+
+      feedback.style.color = 'var(--gold)';
+      feedback.textContent = 'Redirecionando para o WhatsApp...';
+      setTimeout(() => { window.open(url, '_blank'); }, 600);
+    }
   </script>
 </body>
 </html>

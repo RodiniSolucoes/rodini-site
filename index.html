@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rodini Soluções | Planejamento com Propósito</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #e8c97a;
+      --gold-dark: #a07830;
+      --black: #0a0a0a;
+      --dark: #111111;
+      --card: #161616;
+      --card2: #1c1c1c;
+      --white: #f5f0e8;
+      --gray: #888880;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Josefin Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--sans);
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 2px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 60px;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      transition: padding 0.3s;
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.12em;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--white); font-weight: 300; }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      padding: 120px 60px 80px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 50%, rgba(201,168,76,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+    }
+    .hero-lines {
+      position: absolute; inset: 0; opacity: 0.04;
+      background-image: repeating-linear-gradient(
+        0deg, transparent, transparent 79px, rgba(201,168,76,0.6) 80px
+      );
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 860px; text-align: center;
+      animation: fadeUp 1.2s ease both;
+    }
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+    }
+    .hero-eyebrow::before, .hero-eyebrow::after {
+      content: ''; display: block; width: 40px; height: 1px; background: var(--gold-dark);
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 28px;
+    }
+    .hero-title em {
+      font-style: italic; color: var(--gold);
+    }
+    .hero-subtitle {
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      color: var(--gray);
+      line-height: 1.9;
+      max-width: 620px; margin: 0 auto 48px;
+    }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 16px 40px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .hero-cta::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--gold); transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .hero-cta:hover::before { transform: scaleX(1); }
+    .hero-cta:hover { color: var(--black); }
+    .hero-cta span { position: relative; z-index: 1; }
+
+    /* ── GOLD DIVIDER ── */
+    .divider {
+      width: 60px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 20px;
+    }
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 300;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+    .section-desc {
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      color: var(--gray);
+      line-height: 2;
+      text-align: center;
+      max-width: 640px; margin: 0 auto 60px;
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 100px 60px; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+
+    /* ── MVV CARDS ── */
+    #mvv { background: var(--dark); }
+    .mvv-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .mvv-card {
+      background: var(--card);
+      padding: 52px 40px;
+      position: relative; overflow: hidden;
+      transition: transform 0.4s, background 0.4s;
+    }
+    .mvv-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      transform: scaleX(0); transform-origin: center;
+      transition: transform 0.5s;
+    }
+    .mvv-card:hover { background: var(--card2); transform: translateY(-4px); }
+    .mvv-card:hover::before { transform: scaleX(1); }
+    .mvv-icon {
+      font-size: 2rem; margin-bottom: 24px;
+      display: block;
+    }
+    .mvv-card h3 {
+      font-family: var(--serif);
+      font-size: 1.5rem; font-weight: 600;
+      color: var(--gold); margin-bottom: 18px;
+      letter-spacing: 0.05em;
+    }
+    .mvv-card p {
+      font-size: 0.82rem; line-height: 2;
+      color: #aaa9a0;
+    }
+
+    /* ── VALORES ── */
+    #valores { background: var(--black); }
+    .valores-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 28px;
+    }
+    .valor-item {
+      border: 1px solid rgba(201,168,76,0.15);
+      padding: 36px 28px;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .valor-item:hover {
+      border-color: var(--gold);
+      transform: translateY(-6px);
+    }
+    .valor-num {
+      font-family: var(--serif);
+      font-size: 2.8rem; font-weight: 300;
+      color: rgba(201,168,76,0.2);
+      display: block; margin-bottom: 10px;
+      line-height: 1;
+    }
+    .valor-item h4 {
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .valor-item p {
+      font-size: 0.78rem;
+      color: var(--gray);
+      line-height: 1.8;
+    }
+
+    /* ── LIVRO ── */
+    #livro { background: var(--dark); }
+    .livro-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .livro-cover {
+      position: relative;
+    }
+    .book-visual {
+      background: linear-gradient(135deg, #1a1a1a 0%, #222 40%, #1a1a1a 100%);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 4px;
+      padding: 60px 40px;
+      text-align: center;
+      position: relative;
+      box-shadow: 20px 20px 60px rgba(0,0,0,0.6), inset 0 0 80px rgba(201,168,76,0.02);
+    }
+    .book-visual::before {
+      content: '';
+      position: absolute; top: 0; left: 0; bottom: 0; width: 6px;
+      background: linear-gradient(180deg, var(--gold-dark), var(--gold), var(--gold-dark));
+      border-radius: 4px 0 0 4px;
+    }
+    .book-cross {
+      font-size: 3rem; color: var(--gold); opacity: 0.6; margin-bottom: 20px; display: block;
+    }
+    .book-visual h2 {
+      font-family: var(--serif);
+      font-size: 2rem; font-weight: 600;
+      color: var(--white);
+      line-height: 1.2; margin-bottom: 12px;
+    }
+    .book-visual h2 em { color: var(--gold); font-style: italic; }
+    .book-author {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin-top: 24px;
+    }
+    .livro-content h2 {
+      font-family: var(--serif);
+      font-size: 2.4rem; font-weight: 300;
+      margin-bottom: 28px;
+      line-height: 1.2;
+    }
+    .livro-content h2 em { color: var(--gold); font-style: italic; }
+    .livro-content p {
+      font-size: 0.83rem;
+      color: #aaa; line-height: 2;
+      margin-bottom: 20px;
+    }
+    .livro-features {
+      display: flex; flex-direction: column; gap: 16px;
+      margin-top: 32px;
+    }
+    .livro-feature {
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .feature-icon {
+      width: 36px; height: 36px; flex-shrink: 0;
+      border: 1px solid var(--gold-dark);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+      color: var(--gold);
+    }
+    .livro-feature p { font-size: 0.8rem; color: var(--gray); line-height: 1.7; margin: 0; }
+    .livro-feature strong { color: var(--white); font-weight: 400; display: block; margin-bottom: 4px; }
+
+    /* ── METODOLOGIA ── */
+    #metodologia { background: var(--black); }
+    .metod-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 20px;
+    }
+    .metod-card {
+      background: var(--card);
+      padding: 44px 32px;
+      position: relative;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .metod-card:hover { background: var(--card2); border-color: var(--gold); }
+    .metod-letter {
+      font-family: var(--serif);
+      font-size: 4rem; font-weight: 700;
+      color: rgba(201,168,76,0.12);
+      line-height: 1; margin-bottom: 16px;
+      display: block;
+    }
+    .metod-card h4 {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px;
+    }
+    .metod-card p { font-size: 0.78rem; color: var(--gray); line-height: 1.8; }
+
+    /* ── VERSÍCULO ── */
+    #versiculo {
+      background:
+        linear-gradient(135deg, rgba(201,168,76,0.06) 0%, transparent 60%),
+        var(--dark);
+      border-top: 1px solid rgba(201,168,76,0.1);
+      border-bottom: 1px solid rgba(201,168,76,0.1);
+      padding: 80px 60px;
+    }
+    .versiculo-inner {
+      max-width: 700px; margin: 0 auto; text-align: center;
+    }
+    .versiculo-inner blockquote {
+      font-family: var(--serif);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.6;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+    .versiculo-ref {
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ── CONTATO ── */
+    #contato { background: var(--black); }
+    .contato-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .contato-info h3 {
+      font-family: var(--serif);
+      font-size: 2rem; font-weight: 300;
+      margin-bottom: 20px;
+    }
+    .contato-info h3 em { color: var(--gold); font-style: italic; }
+    .contato-info p { font-size: 0.82rem; color: var(--gray); line-height: 2; margin-bottom: 32px; }
+    .contato-item {
+      display: flex; gap: 16px; align-items: center; margin-bottom: 16px;
+    }
+    .contato-item .icon { color: var(--gold); font-size: 1rem; }
+    .contato-item span { font-size: 0.8rem; color: var(--gray); letter-spacing: 0.08em; }
+    .contato-link { text-decoration: none; transition: opacity 0.2s; }
+    .contato-link:hover { opacity: 0.75; }
+    .contato-link:hover span:last-child { color: var(--gold); }
+    .contato-form { display: flex; flex-direction: column; gap: 16px; }
+    .contato-form input, .contato-form textarea {
+      background: var(--card);
+      border: 1px solid rgba(201,168,76,0.15);
+      color: var(--white);
+      padding: 16px 20px;
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      outline: none;
+      transition: border-color 0.3s;
+      resize: none;
+    }
+    .contato-form input::placeholder, .contato-form textarea::placeholder { color: #555; }
+    .contato-form input:focus, .contato-form textarea:focus { border-color: var(--gold); }
+    .contato-form textarea { height: 140px; }
+    .btn-send {
+      align-self: flex-start;
+      padding: 16px 44px;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative; overflow: hidden;
+      transition: color 0.3s;
+    }
+    .btn-send::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--gold); transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .btn-send:hover::before { transform: scaleX(1); }
+    .btn-send:hover { color: var(--black); }
+    .btn-send span { position: relative; z-index: 1; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      border-top: 1px solid rgba(201,168,76,0.12);
+      padding: 40px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-brand {
+      font-family: var(--serif);
+      font-size: 1.4rem; font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.12em;
+    }
+    .footer-brand span { color: var(--white); font-weight: 300; }
+    .footer-copy {
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      color: #444;
+    }
+    .footer-verse {
+      font-family: var(--serif);
+      font-size: 0.78rem;
+      font-style: italic;
+      color: var(--gold-dark);
+    }
+    .footer-social { display: flex; gap: 12px; align-items: center; }
+    .social-btn {
+      width: 38px; height: 38px;
+      border: 1px solid rgba(201,168,76,0.25);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gray);
+      text-decoration: none;
+      transition: border-color 0.3s, color 0.3s, transform 0.3s;
+    }
+    .social-btn:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-3px); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      section { padding: 70px 24px; }
+      .mvv-grid, .metod-grid { grid-template-columns: 1fr; }
+      .livro-layout, .contato-layout { grid-template-columns: 1fr; gap: 48px; }
+      footer { flex-direction: column; gap: 16px; text-align: center; }
+      #hero { padding: 100px 24px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Rodini<span> Soluções</span></a>
+    <ul class="nav-links">
+      <li><a href="#mvv">A Empresa</a></li>
+      <li><a href="#valores">Valores</a></li>
+      <li><a href="#livro">O Livro</a></li>
+      <li><a href="#metodologia">Metodologia</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Rodini Soluções</div>
+      <h1 class="hero-title">
+        Planejamento com<br /><em>Propósito</em>
+      </h1>
+      <p class="hero-subtitle">
+        Integrando os ensinamentos de Jesus Cristo à gestão estratégica de materiais,
+        supply chain e planejamento operacional — porque excelência e propósito caminham juntos.
+      </p>
+      <a href="#livro" class="hero-cta"><span>Conheça o Livro</span></a>
+    </div>
+  </section>
+
+  <!-- VERSÍCULO DESTAQUE -->
+  <section id="versiculo" style="padding:70px 60px">
+    <div class="versiculo-inner">
+      <blockquote>
+        "Porque eu sei os planos que tenho para vocês, diz o SENHOR, planos de fazê-los prosperar e não de causar dano, planos de dar a vocês esperança e um futuro."
+      </blockquote>
+      <div class="versiculo-ref">Jeremias 29:11</div>
+    </div>
+  </section>
+
+  <!-- MISSÃO, VISÃO, VALORES -->
+  <section id="mvv">
+    <div class="section-inner">
+      <div class="section-label">A Empresa</div>
+      <div class="divider"></div>
+      <h2 class="section-title">Nossa <em>Essência</em></h2>
+      <p class="section-desc">
+        A Rodini nasceu da convicção de que planejar bem é um ato de responsabilidade —
+        com as pessoas, com os resultados e com o propósito maior de servir com excelência.
+      </p>
+      <div class="mvv-grid reveal">
+        <div class="mvv-card">
+          <span class="mvv-icon">🎯</span>
+          <h3>Missão</h3>
+          <p>
+            Transformar a gestão de materiais e supply chain em vantagem competitiva sustentável,
+            apoiando empresas com metodologias estruturadas, fundamentadas em princípios de
+            integridade, serviço e propósito — conectando planejamento técnico ao que realmente importa.
+          </p>
+        </div>
+        <div class="mvv-card">
+          <span class="mvv-icon">✨</span>
+          <h3>Visão</h3>
+          <p>
+            Ser reconhecida como referência nacional em consultoria de planejamento com propósito,
+            inspirando líderes e equipes a construírem operações resilientes, humanas e eficientes —
+            onde cada decisão reflete tanto inteligência técnica quanto caráter.
+          </p>
+        </div>
+        <div class="mvv-card">
+          <span class="mvv-icon">⚓</span>
+          <h3>Valores</h3>
+          <p>
+            <strong style="color:var(--white)">Integridade.</strong> Fazemos o que dizemos.<br />
+            <strong style="color:var(--white)">Serviço.</strong> Existimos para o outro.<br />
+            <strong style="color:var(--white)">Excelência.</strong> Não basta fazer — é preciso fazer bem.<br />
+            <strong style="color:var(--white)">Propósito.</strong> Todo planejamento tem uma razão maior.<br />
+            <strong style="color:var(--white)">Fé.</strong> Cremos que boas raízes produzem grandes frutos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALORES DETALHADOS -->
+  <section id="valores">
+    <div class="section-inner">
+      <div class="section-label">Princípios</div>
+      <div class="divider"></div>
+      <h2 class="section-title">O que nos <em>Guia</em></h2>
+      <p class="section-desc">
+        Cada valor é uma escolha diária. São os princípios que norteiam cada projeto,
+        cada relacionamento e cada entrega da Rodini.
+      </p>
+      <div class="valores-grid reveal">
+        <div class="valor-item">
+          <span class="valor-num">01</span>
+          <h4>Integridade</h4>
+          <p>Agimos com transparência e coerência em todas as relações — com clientes, parceiros e equipe.</p>
+        </div>
+        <div class="valor-item">
+          <span class="valor-num">02</span>
+          <h4>Serviço</h4>
+          <p>Inspirados por Jesus, entendemos que servir é a maior forma de liderança e de geração de valor.</p>
+        </div>
+        <div class="valor-item">
+          <span class="valor-num">03</span>
+          <h4>Excelência</h4>
+          <p>Entregamos além do esperado, porque tudo o que fazemos é feito como para o Senhor.</p>
+        </div>
+        <div class="valor-item">
+          <span class="valor-num">04</span>
+          <h4>Propósito</h4>
+          <p>Cada projeto tem uma razão maior. Planejamos com a consciência de que nosso trabalho impacta vidas.</p>
+        </div>
+        <div class="valor-item">
+          <span class="valor-num">05</span>
+          <h4>Disciplina</h4>
+          <p>O planejamento bem executado nasce da constância — de hábitos, processos e comprometimento diário.</p>
+        </div>
+        <div class="valor-item">
+          <span class="valor-num">06</span>
+          <h4>Sabedoria</h4>
+          <p>"Se algum de vocês tem falta de sabedoria, peça a Deus." Buscamos discernimento antes de cada decisão.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- O LIVRO -->
+  <section id="livro">
+    <div class="section-inner">
+      <div class="section-label">Publicação</div>
+      <div class="divider"></div>
+      <div class="livro-layout reveal">
+        <div class="livro-cover">
+          <div class="book-visual">
+            <span class="book-cross">✝</span>
+            <h2>Planejamento<br />com <em>Propósito</em></h2>
+            <p style="font-size:0.78rem;color:#666;margin-top:16px;line-height:1.7">
+              A sabedoria de Jesus aplicada à<br />gestão de materiais e supply chain
+            </p>
+            <div class="book-author">Maicon Rodini</div>
+          </div>
+        </div>
+        <div class="livro-content">
+          <h2>O <em>Livro</em> que une fé e gestão</h2>
+          <p>
+            <strong style="color:var(--white)">Planejamento com Propósito</strong> é uma obra que conecta
+            os ensinamentos de Jesus Cristo às melhores práticas de planejamento de materiais,
+            supply chain e gestão operacional.
+          </p>
+          <p>
+            Com mais de uma década de experiência como analista sênior de PCM e pós-graduado
+            em Supply Chain, Maicon Rodini mostra que a excelência técnica e a fé não são opostos
+            — são complementares.
+          </p>
+          <div class="livro-features">
+            <div class="livro-feature">
+              <div class="feature-icon">📖</div>
+              <p>
+                <strong>Fundamentos Bíblicos do Planejamento</strong>
+                Como os princípios de Jesus sobre mordomia, previsão e sabedoria se aplicam ao PCM moderno.
+              </p>
+            </div>
+            <div class="livro-feature">
+              <div class="feature-icon">⚙️</div>
+              <p>
+                <strong>Metodologia P.P.E.R.F.O.R.M.A.</strong>
+                Framework proprietário Rodini de 9 etapas para gestão de alta performance.
+              </p>
+            </div>
+            <div class="livro-feature">
+              <div class="feature-icon">🏭</div>
+              <p>
+                <strong>Casos Reais de Supply Chain</strong>
+                Da origem ao cliente final: lead times internacionais, gestão de estoque, planejamento de longo prazo e visibilidade em toda a cadeia de suprimentos.
+              </p>
+            </div>
+            <div class="livro-feature">
+              <div class="feature-icon">✝️</div>
+              <p>
+                <strong>Liderança com Propósito</strong>
+                Como formar equipes e tomar decisões com integridade, clareza e visão de longo prazo.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METODOLOGIA P.P.E.R.F.O.R.M.A. -->
+  <section id="metodologia">
+    <div class="section-inner">
+      <div class="section-label">Framework</div>
+      <div class="divider"></div>
+      <h2 class="section-title">Metodologia <em>P.P.E.R.F.O.R.M.A.</em></h2>
+      <p class="section-desc">
+        Nove etapas estruturadas em três fases — Organizar, Executar e Evoluir —
+        para transformar a gestão de materiais em diferencial competitivo.
+      </p>
+      <div class="metod-grid reveal">
+        <div class="metod-card">
+          <span class="metod-letter">P</span>
+          <h4>Planejamento</h4>
+          <p>Definição de objetivos claros, horizonte de planejamento e alinhamento estratégico com a liderança.</p>
+        </div>
+        <div class="metod-card">
+          <span class="metod-letter">P</span>
+          <h4>Processo</h4>
+          <p>Mapeamento e padronização dos fluxos operacionais, eliminando desperdícios e gargalos.</p>
+        </div>
+        <div class="metod-card">
+          <span class="metod-letter">E</span>
+          <h4>Execução</h4>
+          <p>Implementação disciplinada das rotinas de PCM, compras e abastecimento com foco em resultado.</p>
+        </div>
+        <div class="metod-card">
+          <span class="metod-letter">R</span>
+          <h4>Resultado</h4>
+          <p>Monitoramento de KPIs, SLA, XLA e indicadores de desempenho logístico com visão sistêmica.</p>
+        </div>
+        <div class="metod-card">
+          <span class="metod-letter">F</span>
+          <h4>Foco</h4>
+          <p>Priorização dos itens críticos, análise ABC/XYZ e gestão de itens de alto impacto no negócio.</p>
+        </div>
+        <div class="metod-card">
+          <span class="metod-letter">O</span>
+          <h4>Otimização</h4>
+          <p>Revisão contínua de parâmetros, lote econômico, ponto de pedido e cobertura de estoque.</p>
+        </div>
+        <div class="metod-card">
+          <span class="metod-letter">R</span>
+          <h4>Relacionamento</h4>
+          <p>Desenvolvimento de fornecedores, SRM e construção de parcerias de longo prazo com propósito.</p>
+        </div>
+        <div class="metod-card">
+          <span class="metod-letter">M</span>
+          <h4>Melhoria</h4>
+          <p>Ciclos de melhoria contínua baseados em dados, feedback de equipe e aprendizado organizacional.</p>
+        </div>
+        <div class="metod-card">
+          <span class="metod-letter">A</span>
+          <h4>Adaptação</h4>
+          <p>Capacidade de resposta às mudanças do mercado, disruptions e novos cenários com resiliência.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VERSÍCULO 2 -->
+  <section id="versiculo" style="padding:70px 60px;background:var(--dark);border-top:1px solid rgba(201,168,76,0.1);border-bottom:1px solid rgba(201,168,76,0.1)">
+    <div class="versiculo-inner">
+      <blockquote>
+        "Os planos do diligente certamente levam à abundância, mas todo aquele que age com pressa certamente acaba na pobreza."
+      </blockquote>
+      <div class="versiculo-ref">Provérbios 21:5</div>
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section id="contato">
+    <div class="section-inner">
+      <div class="section-label">Fale Conosco</div>
+      <div class="divider"></div>
+      <div class="contato-layout reveal">
+        <div class="contato-info">
+          <h3>Vamos planejar<br /><em>juntos?</em></h3>
+          <p>
+            Se você busca transformar a gestão de materiais da sua empresa com propósito,
+            metodologia e resultado, a Rodini está pronta para caminhar com você.
+          </p>
+          <div class="contato-item">
+            <span class="icon">🌐</span>
+            <span>rodini.com.br</span>
+          </div>
+          <div class="contato-item">
+            <span class="icon">📧</span>
+            <span>contato@rodini.com.br</span>
+          </div>
+          <a href="https://wa.me/5541984648150" target="_blank" class="contato-item contato-link">
+            <span class="icon">📱</span>
+            <span>(41) 98464-8150 · WhatsApp</span>
+          </a>
+          <a href="https://whatsapp.com/channel/0029Vb7Imwm3bbV7XLbyMN2B" target="_blank" class="contato-item contato-link">
+            <span class="icon">💬</span>
+            <span>Canal WhatsApp · Planejamento com Propósito</span>
+          </a>
+          <a href="https://open.spotify.com/episode/2qjDsuTrQMSa4A8Pl7K9SZ?si=c7fcxwTGSbW05cixiO0Xww" target="_blank" class="contato-item contato-link">
+            <span class="icon">🎙️</span>
+            <span>Podcast Rodinicast · Ouça no Spotify</span>
+          </a>
+          <div class="contato-item">
+            <span class="icon">📍</span>
+            <span>Brasil</span>
+          </div>
+        </div>
+        <div class="contato-form">
+          <input type="text" placeholder="Seu nome" />
+          <input type="email" placeholder="Seu e-mail" />
+          <input type="text" placeholder="Empresa" />
+          <textarea placeholder="Como podemos ajudar?"></textarea>
+          <button class="btn-send"><span>Enviar mensagem</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">Rodini<span> Soluções</span></div>
+    <div class="footer-copy">© 2025 Rodini Soluções · Todos os direitos reservados</div>
+    <div class="footer-social">
+      <a href="https://www.facebook.com/profile.php?id=100067602641245" target="_blank" class="social-btn" title="Facebook">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/rodinisolucoesoficial/" target="_blank" class="social-btn" title="Instagram">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@rodini.solues.ofi?lang=pt-BR" target="_blank" class="social-btn" title="TikTok">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => obs.observe(r));
+
+    // Nav shrink on scroll
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      nav.style.padding = window.scrollY > 60 ? '12px 60px' : '20px 60px';
+    });
+  </script>
+</body>
+</html>

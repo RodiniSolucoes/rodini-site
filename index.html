@@ -801,18 +801,43 @@
           </a>
           <div class="contato-item">
             <span class="icon">📍</span>
-            <span>Brasil</span>
+            <span>Pinhais - PR</span>
           </div>
         </div>
         <div class="contato-form">
-          <input type="text" id="nome" placeholder="Seu nome" />
-          <input type="email" id="email" placeholder="Seu e-mail" />
-          <input type="text" id="empresa" placeholder="Empresa" />
-          <textarea id="mensagem" placeholder="Como podemos ajudar?"></textarea>
+          <input type="text" name="nome" placeholder="Seu nome" required />
+          <input type="email" name="email" placeholder="Seu e-mail" required />
+          <input type="text" name="empresa" placeholder="Empresa" />
+          <textarea name="mensagem" placeholder="Como podemos ajudar?" required></textarea>
           <div id="form-feedback" style="font-size:0.75rem;min-height:20px;color:var(--gold);letter-spacing:0.08em;"></div>
-          <button class="btn-send" onclick="enviarMensagem()"><span>Enviar mensagem</span></button>
+          <button type="button" class="btn-send" onclick="enviarContato()"><span>Enviar mensagem</span></button>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section style="background:var(--dark);padding:70px 60px;border-top:1px solid rgba(201,168,76,0.1);">
+    <div style="max-width:600px;margin:0 auto;text-align:center;">
+      <div class="section-label">Newsletter</div>
+      <div class="divider"></div>
+      <h2 style="font-family:var(--serif);font-size:2rem;font-weight:300;margin-bottom:12px;">
+        Receba conteúdo <em style="color:var(--gold);font-style:italic;">semanal</em>
+      </h2>
+      <p style="font-size:0.82rem;color:var(--gray);line-height:2;margin-bottom:32px;">
+        Planejamento, supply chain e propósito — direto no seu e-mail toda semana.
+      </p>
+      <div style="display:flex;gap:12px;max-width:480px;margin:0 auto;">
+        <input type="email" id="nl-email" placeholder="Seu melhor e-mail"
+          style="flex:1;background:var(--card);border:1px solid rgba(201,168,76,0.2);color:var(--white);padding:16px 20px;font-family:var(--sans);font-size:0.8rem;letter-spacing:0.06em;outline:none;transition:border-color 0.3s;"
+          onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='rgba(201,168,76,0.2)'" />
+        <button onclick="enviarNewsletter()" style="padding:16px 28px;background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--sans);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;white-space:nowrap;"
+          onmouseover="this.style.background='var(--gold)';this.style.color='var(--black)'"
+          onmouseout="this.style.background='transparent';this.style.color='var(--gold)'">
+          Inscrever
+        </button>
+      </div>
+      <div id="nl-feedback" style="margin-top:14px;font-size:0.75rem;min-height:18px;color:var(--gold);letter-spacing:0.08em;"></div>
     </div>
   </section>
 
@@ -851,12 +876,13 @@
       nav.style.padding = window.scrollY > 60 ? '12px 60px' : '20px 60px';
     });
 
-    // Contact form - sends email only
-    function enviarMensagem() {
-      const nome = document.getElementById('nome').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const empresa = document.getElementById('empresa').value.trim();
-      const mensagem = document.getElementById('mensagem').value.trim();
+    const FORMSPREE = 'https://formspree.io/f/xojrkeyo';
+
+    async function enviarContato() {
+      const nome = document.querySelector('[name="nome"]').value.trim();
+      const email = document.querySelector('[name="email"]').value.trim();
+      const empresa = document.querySelector('[name="empresa"]').value.trim();
+      const mensagem = document.querySelector('[name="mensagem"]').value.trim();
       const feedback = document.getElementById('form-feedback');
 
       if (!nome || !email || !mensagem) {
@@ -865,22 +891,61 @@
         return;
       }
 
-      const assunto = encodeURIComponent(`Contato pelo site - ${nome}${empresa ? ' | ' + empresa : ''}`);
-      const corpo = encodeURIComponent(
-        `Nome: ${nome}
-` +
-        `E-mail: ${email}
-` +
-        (empresa ? `Empresa: ${empresa}
-` : '') +
-        `
-Mensagem:
-${mensagem}`
-      );
+      feedback.style.color = 'var(--gold)';
+      feedback.textContent = 'Enviando...';
+
+      try {
+        const res = await fetch(FORMSPREE, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nome, email, empresa, mensagem, _subject: `Contato pelo site - ${nome}` })
+        });
+        if (res.ok) {
+          feedback.textContent = '✓ Mensagem enviada! Entraremos em contato em breve.';
+          document.querySelector('[name="nome"]').value = '';
+          document.querySelector('[name="email"]').value = '';
+          document.querySelector('[name="empresa"]').value = '';
+          document.querySelector('[name="mensagem"]').value = '';
+        } else {
+          feedback.style.color = '#e05555';
+          feedback.textContent = 'Erro ao enviar. Tente novamente ou use o WhatsApp.';
+        }
+      } catch(e) {
+        feedback.style.color = '#e05555';
+        feedback.textContent = 'Erro de conexão. Tente novamente.';
+      }
+    }
+
+    async function enviarNewsletter() {
+      const email = document.getElementById('nl-email').value.trim();
+      const feedback = document.getElementById('nl-feedback');
+
+      if (!email || !email.includes('@')) {
+        feedback.style.color = '#e05555';
+        feedback.textContent = 'Por favor, informe um e-mail válido.';
+        return;
+      }
 
       feedback.style.color = 'var(--gold)';
-      feedback.textContent = '✓ Abrindo seu e-mail...';
-      window.location.href = `mailto:contato@rodini.com.br?subject=${assunto}&body=${corpo}`;
+      feedback.textContent = 'Inscrevendo...';
+
+      try {
+        const res = await fetch(FORMSPREE, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, _subject: 'Nova inscrição na Newsletter - Rodini' })
+        });
+        if (res.ok) {
+          feedback.textContent = '✓ Inscrito com sucesso! Bem-vindo à comunidade Rodini.';
+          document.getElementById('nl-email').value = '';
+        } else {
+          feedback.style.color = '#e05555';
+          feedback.textContent = 'Erro ao inscrever. Tente novamente.';
+        }
+      } catch(e) {
+        feedback.style.color = '#e05555';
+        feedback.textContent = 'Erro de conexão. Tente novamente.';
+      }
     }
   </script>
 </body>

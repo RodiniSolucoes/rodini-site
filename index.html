@@ -506,6 +506,18 @@
       footer { flex-direction: column; gap: 16px; text-align: center; }
       #hero { padding: 100px 24px 60px; }
     }
+
+    /* Menu Produtos: única adição visual à navegação existente */
+    .produtos-menu { position:relative; }
+    .produtos-menu details { position:relative; }
+    .produtos-menu summary { list-style:none; cursor:pointer; color:var(--gray); font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; }
+    .produtos-menu summary::-webkit-details-marker { display:none; }
+    .produtos-menu summary::after { content:" ▾"; color:var(--gold); }
+    .produtos-menu summary:hover,.produtos-menu details[open] summary { color:var(--gold); }
+    .produtos-submenu { position:absolute; top:calc(100% + 18px); right:0; min-width:215px; background:#161616; border:1px solid rgba(201,168,76,.3); padding:10px 0; box-shadow:0 12px 35px #0009; }
+    .produtos-submenu a { display:block; padding:14px 18px; white-space:nowrap; }
+    .produtos-submenu a:hover { background:#222; }
+    @media(max-width:900px){ .nav-links {display:flex;gap:0;} .nav-links>li:not(.produtos-menu){display:none;} .produtos-submenu{right:0;} }
   </style>
 </head>
 <body>
@@ -518,7 +530,7 @@
       <li><a href="#valores">Valores</a></li>
       <li><a href="#livro">O Livro</a></li>
       <li><a href="#metodologia">Metodologia</a></li>
-      <li><a href="/controle-financeiro/">Controle Financeiro</a></li>
+      <li class="produtos-menu"><details><summary>Produtos</summary><div class="produtos-submenu"><a href="/livros/">Livros</a><a href="/controle-financeiro/">Controle Financeiro</a></div></details></li>
       <li><a href="#contato">Contato</a></li>
     </ul>
   </nav>
